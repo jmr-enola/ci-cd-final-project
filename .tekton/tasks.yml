@@ -2,7 +2,7 @@ apiVersion: teckton.dev/v1beta1
 kind: Task
 metadata:
   name: cleanup
-specs:
+spec:
   description: This task will clean up a workspace by deleting all the files.
   workspaces:
     - name: source
@@ -10,8 +10,8 @@ specs:
     - name: remove
       image: apline:3
       env:
-        name: WORKSPACE_SOURCE_PATH
-        value: $(workspaces.source.path)
+        - name: WORKSPACE_SOURCE_PATH
+          value: $(workspaces.source.path)
       workingDir: $(workspaces.source.path)
       securityContext:
         runAsNonRoot: false
@@ -38,8 +38,7 @@ apiVersion: teckton.dev/v1beta1
 kind: Task
 metadata:
   name: nose
-specs:
-  description: ""
+spec:
   workspaces:
     - name: source
   params:
@@ -52,9 +51,9 @@ specs:
       image: python:3.9-slim
       workingDir: $(workspaces.source.path)
       script: |
-          #!/bin/bash
-          set -e
-          python -m pip install --upgrade pip wheel
-          pip install -r requirements.txt
-          nosetests $(params.args)
+        #!/bin/bash
+        set -e
+        python -m pip install --upgrade pip wheel
+        pip install -r requirements.txt
+        nosetests $(params.args)
     
